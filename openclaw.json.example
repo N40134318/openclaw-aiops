@@ -1,0 +1,97 @@
+{
+  "wizard": {
+    "lastRunAt": "2026-03-03T05:03:38.912Z",
+    "lastRunVersion": "2026.3.2-beta.1",
+    "lastRunCommand": "onboard",
+    "lastRunMode": "local"
+  },
+  "auth": {
+    "profiles": {
+      "openai": {
+        "provider": "openai",
+        "mode": "api_key"
+      }
+    }
+  },
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "dashscope/qwen-plus"
+      },
+      "models": {
+        "openai/gpt-5.1-codex": {
+          "alias": "GPT"
+        },
+        "dashscope/qwen-plus": {}
+      },
+      "workspace": "/home/node/.openclaw/workspace",
+      "compaction": {
+        "mode": "safeguard"
+      },
+      "maxConcurrent": 4,
+      "subagents": {
+        "maxConcurrent": 8
+      }
+    }
+  },
+  "tools": {
+    "allow": [
+      "exec",
+      "read",
+      "write"
+    ]
+  },
+  "messages": {
+    "ackReactionScope": "group-mentions"
+  },
+  "commands": {
+    "native": "auto",
+    "nativeSkills": "auto",
+    "restart": true,
+    "ownerDisplay": "raw"
+  },
+  "session": {
+    "dmScope": "main"
+  },
+  "gateway": {
+    "port": 18789,
+    "mode": "local",
+    "bind": "loopback",
+    "auth": {
+      "mode": "token",
+      "token": "d28344726a88764a9d3c996f76fe066210c56c9baf0fd5c8c5191ca37008a057"
+    },
+    "controlUi": {
+      "allowedOrigins": [
+        "*"
+      ]
+    }
+  },
+  "meta": {
+    "lastTouchedVersion": "2026.3.2-beta.1",
+    "lastTouchedAt": "2026-03-03T05:03:38.920Z"
+  },
+  "models": {
+    "providers": {
+      "dashscope": {
+        "baseUrl": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+        "api": "openai-completions",
+        "apiKey": "${DASHSCOPE_API_KEY}",
+        "models": [
+          {
+            "id": "qwen-turbo",
+            "name": "Qwen Turbo"
+          },
+          {
+            "id": "qwen-plus",
+            "name": "Qwen Plus"
+          },
+          {
+            "id": "qwen-max",
+            "name": "Qwen Max"
+          }
+        ]
+      }
+    }
+  }
+}

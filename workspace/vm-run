@@ -1,0 +1,232 @@
+#!/bin/sh
+
+OUT="/home/node/.openclaw/workspace/vm-last.txt"
+HOST="claw@host.docker.internal"
+
+run_ssh() {
+  ssh \
+    -o BatchMode=yes \
+    -o StrictHostKeyChecking=no \
+    -o UserKnownHostsFile=/dev/null \
+    -o ConnectTimeout=5 \
+    -T \
+    "$HOST" "$@" > "$OUT" 2>&1
+  status=$?
+  cat "$OUT"
+  exit $status
+}
+
+print_usage() {
+  cat <<'USAGE'
+vm-run v2
+
+基础命令:
+  vm-run sys
+  vm-run uptime
+  vm-run mem
+  vm-run disk
+  vm-run health
+  vm-run exec "<raw command>"
+
+Docker:
+  vm-run docker ps
+  vm-run docker logs <container> [lines]
+  vm-run docker restart <container>
+  vm-run docker inspect <container>
+  vm-run docker images
+
+Service:
+  vm-run service status <name>
+  vm-run service restart <name>
+  vm-run service logs <name> [lines]
+
+ChatOps 风格:
+  vm-run host status
+  vm-run host uptime
+  vm-run host mem
+  vm-run host disk
+  vm-run host health
+  vm-run host docker ps
+  vm-run host docker logs <container> [lines]
+  vm-run host service status <name>
+  vm-run host service restart <name>
+  vm-run host exec "<raw command>"
+
+示例:
+  vm-run sys
+  vm-run health
+  vm-run docker ps
+  vm-run docker logs nginx 100
+  vm-run service status ssh
+  vm-run host docker restart openclaw-openclaw-gateway-1
+  vm-run exec "date"
+USAGE
+  exit 1
+}
+
+run_sys() {
+  run_ssh 'printf "== uptime ==\n"; uptime;
+           printf "\n== memory ==\n"; free -h;
+           printf "\n== disk ==\n"; df -h;
+           printf "\n== docker ==\n"; docker ps'
+}
+
+run_uptime() {
+  run_ssh "uptime"
+}
+
+run_mem() {
+  run_ssh "free -h"
+}
+
+run_disk() {
+  run_ssh "df -h"
+}
+
+run_health() {
+  run_ssh 'printf "== uptime ==\n"; uptime;
+           printf "\n== load ==\n"; cat /proc/loadavg;
+           printf "\n== memory ==\n"; free -h;
+           printf "\n== disk ==\n"; df -h;
+           printf "\n== docker ==\n"; docker ps;
+           printf "\n== top cpu (snapshot) ==\n"; ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%cpu | head'
+}
+
+run_exec() {
+  [ $# -gt 0 ] || { echo "缺少原始命令"; exit 2; }
+  run_ssh "$*"
+}
+
+run_docker() {
+  sub="$1"
+  shift || true
+
+  case "$sub" in
+    ps)
+      run_ssh "docker ps"
+      ;;
+    logs)
+      container="$1"
+      lines="${2:-100}"
+      [ -n "$container" ] || { echo "缺少 container 名称"; exit 2; }
+      run_ssh "docker logs --tail $lines $container"
+      ;;
+    restart)
+      container="$1"
+      [ -n "$container" ] || { echo "缺少 container 名称"; exit 2; }
+      run_ssh "docker restart $container && docker ps"
+      ;;
+    inspect)
+      container="$1"
+      [ -n "$container" ] || { echo "缺少 container 名称"; exit 2; }
+      run_ssh "docker inspect $container"
+      ;;
+    images)
+      run_ssh "docker images"
+      ;;
+    *)
+      echo "不支持的 docker 子命令"
+      exit 2
+      ;;
+  esac
+}
+
+run_service() {
+  sub="$1"
+  shift || true
+
+  case "$sub" in
+    status)
+      name="$1"
+      [ -n "$name" ] || { echo "缺少 service 名称"; exit 2; }
+      run_ssh "systemctl status $name --no-pager"
+      ;;
+    restart)
+      name="$1"
+      [ -n "$name" ] || { echo "缺少 service 名称"; exit 2; }
+      run_ssh "sudo systemctl restart $name && systemctl status $name --no-pager"
+      ;;
+    logs)
+      name="$1"
+      lines="${2:-100}"
+      [ -n "$name" ] || { echo "缺少 service 名称"; exit 2; }
+      run_ssh "sudo journalctl -u $name -n $lines --no-pager"
+      ;;
+    *)
+      echo "不支持的 service 子命令"
+      exit 2
+      ;;
+  esac
+}
+
+run_host_alias() {
+  sub="$1"
+  shift || true
+
+  case "$sub" in
+    status|sys)
+      run_sys
+      ;;
+    uptime)
+      run_uptime
+      ;;
+    mem|memory)
+      run_mem
+      ;;
+    disk|storage)
+      run_disk
+      ;;
+    health)
+      run_health
+      ;;
+    docker)
+      run_docker "$@"
+      ;;
+    service)
+      run_service "$@"
+      ;;
+    exec)
+      run_exec "$@"
+      ;;
+    *)
+      print_usage
+      ;;
+  esac
+}
+
+cmd="$1"
+[ -n "$cmd" ] || print_usage
+shift || true
+
+case "$cmd" in
+  sys)
+    run_sys
+    ;;
+  uptime)
+    run_uptime
+    ;;
+  mem)
+    run_mem
+    ;;
+  disk)
+    run_disk
+    ;;
+  health)
+    run_health
+    ;;
+  exec)
+    run_exec "$@"
+    ;;
+  docker)
+    run_docker "$@"
+    ;;
+  service)
+    run_service "$@"
+    ;;
+  host)
+    run_host_alias "$@"
+    ;;
+  *)
+    print_usage
+    ;;
+esac
