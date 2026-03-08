@@ -102,7 +102,6 @@ docker-compose up -d
 ```bash
 scripts/verify-deploy.sh
 ```
-注：实际使用时把 node 替换为自己的用户名。
 
 ## 文件结构
 
