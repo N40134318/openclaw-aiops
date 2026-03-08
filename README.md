@@ -197,7 +197,7 @@ docs/
 
 ## 贡献
 
-欢迎提交 issues 或 pull requests，帮助改进 OpenClaw AI Ops Agent。如果你有任何问题或建议，请在 [GitHub Issues](https://github.com/%E4%BD%A0%E7%9A%84%E7%94%A8%E6%88%B7%E5%90%8D/openclaw-aiops/issues) 提出。
+欢迎提交 issues 或 pull requests，帮助改进 OpenClaw AI Ops Agent。如果你有任何问题或建议，请在 [GitHub Issues](https://github.com/N40134318/openclaw-aiops/issues) 提出。
 
 ## 许可证
 
