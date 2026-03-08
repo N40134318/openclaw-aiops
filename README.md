@@ -95,11 +95,14 @@ docker-compose up -d
 
 ### 6. 验证部署
 
-运行 `verify-deploy.sh` 脚本以验证部署是否成功。
+在容器内运行 `verify-deploy.sh` 脚本以验证部署是否成功。
+
+它验证的是“容器 → vm-run → SSH → sudo → 宿主机 ”整条链路：
 
 ```bash
 scripts/verify-deploy.sh
 ```
+注：实际使用时把 node 替换为自己的用户名。
 
 ## 文件结构
 
