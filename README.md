@@ -33,7 +33,17 @@ sudo restricted commands
 ↓  
 host services
 
-````
+```
+```mermaid
+graph TD
+User --> Agent
+Agent --> Rules
+Rules --> Tools
+Tools --> vmrun
+vmrun --> SSH
+SSH --> claw
+claw --> HostServices
+```
 
 ### 架构说明
 
