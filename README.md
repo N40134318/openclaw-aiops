@@ -1,8 +1,6 @@
 # OpenClaw AI Ops Agent
 
-AI-powered operations agent for safely executing host-side automation through containerized LLM agents.
-
-OpenClaw AI Ops Agent 是一个基于 LLM 的 AI 运维代理框架，通过安全的宿主机桥接机制执行运维任务。
+OpenClaw AI Ops Agent 是一个基于 LLM 的 AI 运维代理框架，允许 AI Agent 在受控权限下安全地执行宿主机运维任务。
 
 ## 项目特点
 
