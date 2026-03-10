@@ -1,7 +1,8 @@
-
 # OpenClaw AI Ops Agent
 
-**OpenClaw AI Ops Agent** 是一个基于 **AI** 的运维自动化工具，通过 **LLM（大语言模型）** 自动执行宿主机上的运维操作。该系统设计了最小权限的安全模型，使用 **vm-run** 工具执行容器与宿主机之间的命令。
+AI-powered operations agent for safely executing host-side automation through containerized LLM agents.
+
+OpenClaw AI Ops Agent 是一个基于 LLM 的 AI 运维代理框架，通过安全的宿主机桥接机制执行运维任务。
 
 ## 项目特点
 
@@ -119,6 +120,9 @@ workspace/
  ├── TOOLS.md
  └── vm-run
 
+tools/
+ └── weather/
+
 scripts/
  ├── prepare-ubuntu-for-openclaw.sh
  ├── init-host.sh
@@ -222,7 +226,7 @@ OpenClaw-AIOps 支持通过模块化工具扩展系统能力。
 
 ## 许可证
 
-此项目遵循 [MIT 许可证](https://chatgpt.com/c/LICENSE)。
+此项目遵循 [MIT License](LICENSE)。
 
 
 ---
