@@ -1,0 +1,7 @@
+#adapter 依赖
+
+fastapi
+uvicorn
+requests
+beautifulsoup4
+lxml
