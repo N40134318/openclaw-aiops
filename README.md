@@ -1,5 +1,7 @@
 # OpenClaw AI Ops Agent
 
+AI-powered operations agent for securely executing host-side automation through containerized LLM agents.
+
 OpenClaw AI Ops Agent 是一个基于 LLM 的 AI 运维代理框架，允许 AI Agent 在受控权限下安全地执行宿主机运维任务。
 
 ## 项目特点
@@ -15,7 +17,6 @@ OpenClaw AI Ops Agent 是一个基于 LLM 的 AI 运维代理框架，允许 AI 
 OpenClaw AI Ops Agent 基于以下架构设计：
 
 ```
-
 LLM Agent  
 ↓  
 Agent Rules (AGENTS.md / TOOLS.md)  
@@ -89,7 +90,7 @@ sudo apt install -y docker.io docker-compose
 在目标服务器上执行以下命令以启动 Docker 容器：
 
 ```bash
-docker-compose up -d
+docker compose up -d (or docker-compose up -d)
 ```
 
 ### 6. 验证部署
@@ -120,6 +121,10 @@ workspace/
 
 tools/
  └── weather/
+     ├── adapter/
+     ├── scripts/
+     ├── docs/
+     └── README.md
 
 scripts/
  ├── prepare-ubuntu-for-openclaw.sh
@@ -203,6 +208,8 @@ docs/
 OpenClaw-AIOps 支持通过模块化工具扩展系统能力。
 
 扩展模块统一放在 `tools/` 目录下，通过宿主机桥接机制调用，使 Agent 在保持容器隔离的同时，仍然能够安全地使用宿主机工具与外部服务，从而实现更多实际的 AIOps 场景。
+
+每个模块可以为 Agent 提供新的操作能力，例如系统查询、运维工具或外部服务调用。
 
 目前已实现的模块包括：
 
